@@ -4,23 +4,23 @@ def sudoku(puzzle):
     i = 0
     while(new_puzzle.zero_count>0):
         new_puzzle.check_poss()
+        #print([x.posses for x in [y for y in new_puzzle.rows]])
         i += 1
-        if i > 100:
-            return new_puzzle
+        if i > 10:
+            print('failed')
+            return new_puzzle.rows
     return new_puzzle.rows
     
 class Puzzle:
     def __init__(self, rows):
-        self.temp_col_vals = [[rows[i][r] for i in range(len(rows))] for r
-in range(len(rows))]
+        self.temp_col_vals = [[rows[i][r] for i in range(len(rows))] for r in range(len(rows))]
         self.temp_row_vals = rows
         self.temp_block_vals = make_blocks(rows)
         self.ind_list = []
         i = 0
         for item in self.temp_row_vals:
             for num in item:
-                self.ind_list.append(Index(self.temp_col_vals,
-self.temp_row_vals, self.temp_block_vals, i, num))
+                self.ind_list.append(Index(self.temp_col_vals, self.temp_row_vals, self.temp_block_vals, i, num))
                 i += 1
         self.check_poss()
         
@@ -57,17 +57,17 @@ self.temp_row_vals, self.temp_block_vals, i, num))
             pos = [1,2,3,4,5,6,7,8,9]
             if index.val==0:
                 for n in self.row_vals[index.row]:
-                    for n in pos:
+                    if n in pos:
                         pos.remove(n)
                 for n in self.col_vals[index.col]:
-                    for n in pos:
+                    if n in pos:
                         pos.remove(n)
                 for n in self.block_vals[index.block]:
-                    for n in pos:
+                    if n in pos:
                         pos.remove(n)
                 self.ind_list[i].pos = pos
                 if len(pos)==1:
-                    self.ind_list[i].pos = pos[0]
+                    self.ind_list[i].val = pos[0]
             else:
                 self.ind_list[i].pos = [index.val]
     
@@ -104,9 +104,6 @@ class Col(Row):
                 self.indexes.append(i)
                 self.values.append(i.val)
                 self.posses.append(i.pos)
-        
-    def __getitem__(self, key):
-        return self.values[key]
 
 class Block(Row):
     def __init__(self, ind_list, block):
@@ -163,10 +160,11 @@ class Index():
         if self.row in range(6,9) and self.col in range(6,9):
             self.block = 8
             
-        def __repr__(self):
-            return str(self.i)
-        
-puzzle = [[5,3,0,0,7,0,0,0,0],
+    def __repr__(self):
+        return str(self.i)
+
+def main():
+    puzzle = [[5,3,0,0,7,0,0,0,0],
           [6,0,0,1,9,5,0,0,0],
           [0,9,8,0,0,0,0,6,0],
           [8,0,0,0,6,0,0,0,3],
@@ -176,5 +174,8 @@ puzzle = [[5,3,0,0,7,0,0,0,0],
           [0,0,0,4,1,9,0,0,5],
           [0,0,0,0,8,0,0,7,9]]
 
-new_puzzle = sudoku(puzzle)  
-print(new_puzzle)
+    new_puzzle = sudoku(puzzle)  
+    print(new_puzzle)
+
+if __name__=='__main__':
+    main()
