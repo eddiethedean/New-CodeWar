@@ -6,7 +6,7 @@ def sudoku(puzzle):
         new_puzzle.check_poss()
         #print([x.posses for x in [y for y in new_puzzle.rows]])
         i += 1
-        if i > 10:
+        if i > 20:
             print('failed')
             return new_puzzle.rows
     return new_puzzle.rows
